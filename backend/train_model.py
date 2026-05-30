@@ -1,5 +1,5 @@
 """
-VeritasAI — ML Training Script
+VeritasAI — ML Training Script (Stabilization Pass)
 Model: TF-IDF + Logistic Regression
 Dataset: Kaggle Fake and Real News Dataset
 
@@ -18,7 +18,8 @@ import numpy as np
 import pickle
 import re
 import time
-from sklearn.model_selection import train_test_split, cross_val_score
+import os
+from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
@@ -89,15 +90,6 @@ def load_dataset():
 def build_pipeline():
     """
     TF-IDF + Logistic Regression pipeline tuned for maximum accuracy.
-
-    Why these settings:
-    - max_features=100000 : captures more of the vocabulary vs 50k default
-    - ngram_range=(1,3)   : trigrams catch phrases like "deep state hoax"
-    - sublinear_tf=True   : log-normalization reduces influence of very common words
-    - min_df=2            : drops hapax legomena (words appearing only once)
-    - C=10.0              : less regularization → fits patterns more tightly on this dataset
-    - class_weight=balanced: handles slight class imbalance automatically
-    - max_iter=2000       : enough for full convergence
     """
     return Pipeline([
         ('tfidf', TfidfVectorizer(
@@ -170,14 +162,13 @@ def train(df):
 def save_model(pipeline, path='model.pkl'):
     with open(path, 'wb') as f:
         pickle.dump(pipeline, f, protocol=pickle.HIGHEST_PROTOCOL)
-    size_mb = os.path.getsize(path) / 1_000_000 if __import__('os').path.exists(path) else 0
+    size_mb = os.path.getsize(path) / 1_000_000 if os.path.exists(path) else 0
     print(f"\n✅ Model saved → {path}")
     print(f"   File size : {size_mb:.1f} MB")
 
 
 def demo_predictions(pipeline):
-    """Quick sanity check on a few sample headlines"""
-    import os
+    """Quick sanity check on a few sample headlines using the stabilized logic format"""
     samples = [
         ("Reuters Science", "Scientists confirm new vaccine is safe after large clinical trials"),
         ("Fake Conspiracy", "SHOCKING: Government HIDING miracle cure Big Pharma doesn't want you to know!!"),
@@ -189,14 +180,25 @@ def demo_predictions(pipeline):
     print("\n=== Sample Predictions ===")
     for label, text in samples:
         cleaned = preprocess(text)
-        prob    = pipeline.predict_proba([cleaned])[0]
-        verdict = "FAKE" if prob[1] > 0.5 else "REAL"
-        conf    = max(prob) * 100
-        icon    = "🚨" if verdict == "FAKE" else "✅"
+        prob = pipeline.predict_proba([cleaned])[0]
+        fake_prob, real_prob = float(prob[1]), float(prob[0])
+        
+        # Apply the new >= 65% verification threshold used in app.py
+        if real_prob >= 0.65:
+            verdict = "VERIFIED REAL"
+            icon = "✅"
+        elif fake_prob >= 0.65:
+            verdict = "VERIFIED FAKE"
+            icon = "❌"
+        else:
+            verdict = "CLAIM NOT ESTABLISHED"
+            icon = "⚠️"
+
         print(f"\n  {icon} [{label}]")
         print(f"     Text    : {text[:70]}...")
-        print(f"     Verdict : {verdict}  ({conf:.1f}% confidence)")
-        print(f"     Probs   : Real={prob[0]*100:.1f}%  Fake={prob[1]*100:.1f}%")
+        print(f"     Verdict : {verdict}")
+        # Developer output only
+        print(f"     [Internal Probs] Real={real_prob*100:.1f}% | Fake={fake_prob*100:.1f}%")
 
 
 # ─────────────────────────────────────────────
@@ -204,8 +206,6 @@ def demo_predictions(pipeline):
 # ─────────────────────────────────────────────
 
 if __name__ == '__main__':
-    import os
-
     print("\n╔══════════════════════════════════╗")
     print("║  VeritasAI — Model Training      ║")
     print("╚══════════════════════════════════╝\n")

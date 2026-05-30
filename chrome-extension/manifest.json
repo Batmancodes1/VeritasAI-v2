@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "VeritasAI — Misinformation Detector",
-  "version": "1.0.0",
-  "description": "Analyze any webpage for fake news and misinformation with AI.",
+  "version": "2.0.0",
+  "description": "Verify any news article claim with AI.",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": ["http://127.0.0.1:5000/*", "http://localhost:5000/*"],
   "action": {

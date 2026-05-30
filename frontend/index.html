@@ -4,11 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VeritasAI — Misinformation Analyzer</title>
-    <meta name="description" content="AI-powered misinformation detection. Analyze any article for fake news, emotional manipulation, and source credibility." />
-
-    <!-- Favicon: SVG inline as data URI (magnifying glass + AI node) -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080C10'/%3E%3Ccircle cx='13' cy='13' r='6' fill='none' stroke='%234D9FFF' stroke-width='2.5'/%3E%3Cline x1='17.5' y1='17.5' x2='24' y2='24' stroke='%2300E5A0' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='2.5' fill='%234D9FFF' opacity='0.6'/%3E%3C/svg%3E" type="image/svg+xml" />
-
+    <meta
+      name="description"
+      content="AI-powered misinformation detection. Analyze any article for fake news, emotional manipulation, and source credibility."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080C10'/%3E%3Ccircle cx='13' cy='13' r='6' fill='none' stroke='%234D9FFF' stroke-width='2.5'/%3E%3Cline x1='17.5' y1='17.5' x2='24' y2='24' stroke='%2300E5A0' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='13' cy='13' r='2.5' fill='%234D9FFF' opacity='0.6'/%3E%3C/svg%3E"
+      type="image/svg+xml"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
@@ -17,8 +21,6 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-
-    <!-- HEADER -->
     <header class="site-header reveal-header">
       <div class="container">
         <div class="header-inner">
@@ -30,10 +32,20 @@
             <span class="badge badge-beta">BETA</span>
           </div>
           <nav class="nav-tabs" role="tablist" aria-label="Main navigation">
-            <button class="nav-tab active" onclick="switchPage('analyze')" role="tab" aria-selected="true">
+            <button
+              class="nav-tab active"
+              onclick="switchPage('analyze')"
+              role="tab"
+              aria-selected="true"
+            >
               Analyze
             </button>
-            <button class="nav-tab" onclick="switchPage('compare')" role="tab" aria-selected="false">
+            <button
+              class="nav-tab"
+              onclick="switchPage('compare')"
+              role="tab"
+              aria-selected="false"
+            >
               Compare
             </button>
           </nav>
@@ -41,296 +53,395 @@
       </div>
     </header>
 
-    <!-- MAIN -->
     <main class="container">
-
-      <!-- ═══════════ ANALYZE PAGE ═══════════ -->
       <div class="page active" id="page-analyze">
-
-        <!-- HERO -->
         <section class="hero reveal-hero" aria-label="Hero">
-          <p class="hero-eyebrow">// NLP · ML · Misinformation Detection</p>
-          <h1>Detect <em>Fake News</em><br />Before It Spreads</h1>
+          <p class="hero-eyebrow">
+            // Intelligence · Verification · Extraction
+          </p>
+          <h1>Verify <em>News Claims</em><br />In Real-Time</h1>
           <p class="hero-sub">
-            AI-powered analysis combining machine learning, emotional
-            manipulation detection, and source credibility scoring.
+            AI-powered analysis combining entity extraction, claim
+            corroboration, and narrative consistency.
           </p>
           <p class="demo-label">// Try a demo article</p>
           <div class="demo-row">
-            <button class="demo-pill" onclick="loadDemo(0)">📰 Credible Article</button>
-            <button class="demo-pill" onclick="loadDemo(1)">⚠️ Fake News Sample</button>
-            <button class="demo-pill" onclick="loadDemo(2)">🎭 Clickbait Example</button>
+            <button class="demo-pill" onclick="loadDemo(0)">
+              📰 Verified Real
+            </button>
+            <button class="demo-pill" onclick="loadDemo(1)">
+              ❌ Verified Fake
+            </button>
+            <button class="demo-pill" onclick="loadDemo(2)">
+              ⚠️ Unestablished
+            </button>
           </div>
         </section>
 
-        <!-- INPUT CARD -->
         <div class="input-card reveal-content">
           <div class="input-row">
             <div>
-              <div class="field-label">Headline <span class="field-optional">(optional)</span></div>
-              <input type="text" id="headline-input" placeholder="Enter article headline…" autocomplete="off" />
+              <div class="field-label">
+                Headline <span class="field-optional">(optional)</span>
+              </div>
+              <input
+                type="text"
+                id="headline-input"
+                placeholder="Enter article headline…"
+                autocomplete="off"
+              />
             </div>
             <div>
-              <div class="field-label">Source URL <span class="field-optional">(optional)</span></div>
-              <input type="text" id="source-input" placeholder="https://example.com/article" autocomplete="off" />
+              <div class="field-label">
+                Source URL <span class="field-optional">(optional)</span>
+              </div>
+              <input
+                type="text"
+                id="source-input"
+                placeholder="https://example.com/article"
+                autocomplete="off"
+              />
             </div>
           </div>
-          <div class="field-label">Article Content <span class="field-required">*</span></div>
+          <div class="field-label">
+            Article Content <span class="field-required">*</span>
+          </div>
           <textarea
             id="text-input"
-            placeholder="Paste the full article text here to analyze it for misinformation, emotional manipulation, and credibility…"
+            placeholder="Paste the full article text here to extract claims and verify corroborating evidence…"
             aria-label="Article content"
           ></textarea>
           <div class="input-footer">
             <span class="input-hint">Tip: Press Ctrl+Enter to analyze</span>
-            <button class="btn-analyze" onclick="runAnalysis()" id="btn-run" aria-label="Analyze with AI">
-              🧠 Analyze with AI
+            <button
+              class="btn-analyze"
+              onclick="runAnalysis()"
+              id="btn-run"
+              aria-label="Analyze with AI"
+            >
+              🧠 Analyze & Verify
             </button>
           </div>
         </div>
 
-        <!-- LOADING -->
-        <div class="loading-overlay" id="loading" role="status" aria-live="polite" aria-label="Analyzing">
+        <div
+          class="loading-overlay"
+          id="loading"
+          role="status"
+          aria-live="polite"
+        >
           <div class="loader" aria-hidden="true"></div>
-          <div class="loading-text">Running NLP pipeline…</div>
+          <div class="loading-text">
+            Running Extraction & Verification Pipeline…
+          </div>
         </div>
 
-        <!-- RESULTS -->
         <div id="results-panel" aria-live="polite">
-
-          <!-- VERDICT BANNER -->
           <div class="verdict-banner" id="verdict-banner">
             <div class="verdict-top">
               <div class="verdict-left">
-                <div class="verdict-icon" id="verdict-icon" aria-hidden="true"></div>
+                <div
+                  class="verdict-icon"
+                  id="verdict-icon"
+                  aria-hidden="true"
+                ></div>
                 <div>
-                  <div class="verdict-label-small">Classification Result</div>
+                  <div class="verdict-label-small">
+                    Final Verification Verdict
+                  </div>
                   <div class="verdict-label-big" id="verdict-text">—</div>
                 </div>
               </div>
-              <div class="conf-block">
-                <div class="conf-label">Confidence</div>
-                <div class="conf-pct" id="conf-pct">0%</div>
-                <div class="conf-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                  <div class="conf-bar-fill" id="conf-bar" style="width:0%"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="separator"></div>
-
-            <div class="prob-section">
-              <div class="prob-row">
-                <span class="prob-label">REAL</span>
-                <div class="prob-track">
-                  <div class="prob-fill real-fill" id="prob-real" style="width:0%"></div>
-                </div>
-                <span class="prob-pct" id="prob-real-pct">0%</span>
-              </div>
-              <div class="prob-row">
-                <span class="prob-label">FAKE</span>
-                <div class="prob-track">
-                  <div class="prob-fill fake-fill" id="prob-fake" style="width:0%"></div>
-                </div>
-                <span class="prob-pct" id="prob-fake-pct">0%</span>
-              </div>
             </div>
           </div>
 
-          <!-- METRICS GRID -->
           <div class="metrics-grid">
-            <!-- Credibility Score -->
             <div class="metric-card">
               <div class="metric-top">
-                <span class="metric-icon" aria-hidden="true">🛡️</span>
-                <span class="metric-name">Credibility</span>
+                <span class="metric-icon">🛡️</span
+                ><span class="metric-name">Corroboration</span>
               </div>
-              <div class="cred-row">
-                <div class="cred-ring" aria-label="Credibility ring">
-                  <svg width="70" height="70" viewBox="0 0 70 70" aria-hidden="true">
-                    <circle class="cred-ring-track" cx="35" cy="35" r="30" />
-                    <circle class="cred-ring-fill" id="cred-ring" cx="35" cy="35" r="30" />
-                  </svg>
-                  <div class="cred-ring-text" id="cred-score">—</div>
-                </div>
-                <div>
-                  <div class="metric-sub" id="cred-label">—</div>
-                </div>
+              <div
+                class="metric-value"
+                id="corroboration-val"
+                style="font-size: 20px; line-height: 1.2; margin-top: 8px"
+              >
+                —
+              </div>
+              <div
+                class="metric-sub"
+                id="corroboration-sub"
+                style="margin-top: 6px"
+              >
+                —
               </div>
             </div>
 
-            <!-- Emotional Bias -->
             <div class="metric-card">
               <div class="metric-top">
-                <span class="metric-icon" aria-hidden="true">🎭</span>
-                <span class="metric-name">Emotional Bias</span>
+                <span class="metric-icon">🔍</span
+                ><span class="metric-name">Entities Extracted</span>
               </div>
-              <div class="metric-value" id="em-bias-val">—</div>
-              <span class="score-badge" id="em-bias-badge">—</span>
-              <div class="bar-track" role="progressbar">
-                <div class="bar-fill" id="em-bar" style="width:0%; background:var(--warn)"></div>
+              <div class="metric-value" id="entities-val">—</div>
+              <div
+                class="metric-sub"
+                id="entities-sub"
+                style="
+                  margin-top: 6px;
+                  font-family: var(--font-mono);
+                  font-size: 10px;
+                "
+              >
+                —
               </div>
             </div>
 
-            <!-- Clickbait Score -->
             <div class="metric-card">
               <div class="metric-top">
-                <span class="metric-icon" aria-hidden="true">🎣</span>
-                <span class="metric-name">Clickbait</span>
+                <span class="metric-icon">📰</span
+                ><span class="metric-name">Narrative</span>
               </div>
-              <div class="metric-value" id="cb-val">—</div>
-              <div class="metric-sub">/ 100 score</div>
-              <div class="bar-track" role="progressbar">
-                <div class="bar-fill" id="cb-bar" style="width:0%; background:var(--fake)"></div>
+              <div
+                class="metric-value"
+                id="narrative-val"
+                style="font-size: 20px; line-height: 1.2; margin-top: 8px"
+              >
+                —
+              </div>
+              <div
+                class="metric-sub"
+                id="narrative-sub"
+                style="margin-top: 6px"
+              >
+                —
               </div>
             </div>
 
-            <!-- Intensity -->
             <div class="metric-card">
               <div class="metric-top">
-                <span class="metric-icon" aria-hidden="true">⚡</span>
-                <span class="metric-name">Intensity</span>
+                <span class="metric-icon">🎭</span
+                ><span class="metric-name">Manipulation</span>
               </div>
-              <div class="metric-value" id="int-val">—</div>
-              <div class="metric-sub">CAPS + exclamations</div>
-              <div class="bar-track" role="progressbar">
-                <div class="bar-fill" id="int-bar" style="width:0%; background:var(--accent)"></div>
+              <div
+                class="metric-value"
+                id="manipulation-val"
+                style="font-size: 20px; line-height: 1.2; margin-top: 8px"
+              >
+                —
+              </div>
+              <div class="metric-sub" style="margin-top: 6px">
+                Rhetoric analysis
               </div>
             </div>
           </div>
 
-          <!-- AI EXPLANATION -->
           <div class="explain-card">
             <div class="card-header">
-              <div class="card-header-icon" aria-hidden="true">💡</div>
+              <div class="card-header-icon">💡</div>
               <div>
-                <div class="card-title">AI Explanation</div>
-                <div class="card-sub">Generated by NLP analysis pipeline</div>
+                <div class="card-title">Verification Summary</div>
+                <div class="card-sub">Generated by NLP pipeline</div>
               </div>
             </div>
             <p class="explanation-text" id="explanation-text">—</p>
           </div>
 
-          <!-- SOURCE + HEADLINE -->
           <div class="two-col">
             <div class="info-card">
               <div class="card-header">
-                <div class="card-header-icon" aria-hidden="true">🌐</div>
-                <div class="card-title">Source Credibility</div>
+                <div class="card-header-icon">🌐</div>
+                <div class="card-title">Secondary Signal: Source</div>
               </div>
               <div id="source-result">
-                <span class="score-badge badge-unknown">No source provided</span>
+                <span class="score-badge badge-unknown"
+                  >No source provided</span
+                >
               </div>
               <div class="info-reason" id="source-reason">—</div>
             </div>
             <div class="info-card">
               <div class="card-header">
-                <div class="card-header-icon" aria-hidden="true">📰</div>
-                <div class="card-title">Headline vs Content</div>
+                <div class="card-header-icon">📰</div>
+                <div class="card-title">Headline Alignment</div>
               </div>
-              <div class="sim-bar-label">
-                <span>Similarity</span>
-                <span id="sim-pct">—</span>
+              <div
+                style="
+                  font-family: var(--font-display);
+                  font-weight: 700;
+                  font-size: 16px;
+                  margin-bottom: 4px;
+                  color: #fff;
+                "
+                id="sim-status"
+              >
+                —
               </div>
-              <div class="bar-track" role="progressbar">
-                <div class="bar-fill" id="sim-bar" style="width:0%; background:var(--accent)"></div>
+              <div class="info-reason" id="sim-reason" style="margin-top: 0">
+                No headline provided
               </div>
-              <div class="info-reason" id="sim-reason">No headline provided</div>
             </div>
           </div>
 
-          <!-- HIGHLIGHTED TEXT -->
           <div class="highlight-card">
             <div class="card-header">
-              <div class="card-header-icon" aria-hidden="true">🔦</div>
+              <div class="card-header-icon">🔦</div>
               <div>
-                <div class="card-title">Manipulative Language Highlighter</div>
-                <div class="card-sub">Suspicious words are underlined in red</div>
+                <div class="card-title">Manipulative Language Scanner</div>
+                <div class="card-sub">
+                  Subjective phrasing highlighted below
+                </div>
               </div>
             </div>
-            <div class="legend">
-              <div class="legend-item">
-                <div class="legend-dot legend-fake" aria-hidden="true"></div>
-                <span>Suspicious / Manipulative word</span>
-              </div>
-            </div>
-            <div class="highlight-body" id="highlight-body" aria-label="Article text with suspicious words highlighted">—</div>
-            <div class="tag-row" id="suspicious-tags" aria-label="Suspicious words found"></div>
+            <div class="highlight-body" id="highlight-body">—</div>
+            <div class="tag-row" id="suspicious-tags"></div>
           </div>
+        </div>
+      </div>
 
-        </div><!-- /results-panel -->
-      </div><!-- /page-analyze -->
-
-
-      <!-- ═══════════ COMPARE PAGE ═══════════ -->
       <div class="page" id="page-compare">
         <section class="hero hero--compact" aria-label="Compare hero">
-          <p class="hero-eyebrow">// Side-by-side analysis</p>
+          <p class="hero-eyebrow">// Side-by-side verification</p>
           <h1>Compare<br /><em>Two Articles</em></h1>
-          <p class="hero-sub">
-            Determine which article is more credible and which is more biased.
-          </p>
         </section>
 
         <div class="compare-grid">
           <div class="compare-col">
-            <h3>Article 1</h3>
-            <div class="field-label">Headline</div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 14px;
+                flex-wrap: wrap;
+                gap: 10px;
+              "
+            >
+              <h3 style="margin: 0">Article 1</h3>
+              <div class="demo-row" style="margin: 0">
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(1, 'real')"
+                >
+                  Real Example
+                </button>
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(1, 'fake')"
+                >
+                  Fake Example
+                </button>
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(1, 'unknown')"
+                >
+                  Unverified Example
+                </button>
+              </div>
+            </div>
             <input type="text" id="c1-headline" placeholder="Headline…" />
-            <div class="field-label">Source URL</div>
             <input type="text" id="c1-source" placeholder="https://…" />
-            <div class="field-label">Content</div>
-            <textarea id="c1-text" class="compare-textarea" placeholder="Paste article 1 content…"></textarea>
+            <textarea
+              id="c1-text"
+              class="compare-textarea"
+              placeholder="Paste article 1 content…"
+            ></textarea>
           </div>
           <div class="compare-col">
-            <h3>Article 2</h3>
-            <div class="field-label">Headline</div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 14px;
+                flex-wrap: wrap;
+                gap: 10px;
+              "
+            >
+              <h3 style="margin: 0">Article 2</h3>
+              <div class="demo-row" style="margin: 0">
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(2, 'real')"
+                >
+                  Real Example
+                </button>
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(2, 'fake')"
+                >
+                  Fake Example
+                </button>
+                <button
+                  class="demo-pill"
+                  style="padding: 4px 8px; font-size: 10px"
+                  onclick="loadCompareDemo(2, 'unknown')"
+                >
+                  Unverified Example
+                </button>
+              </div>
+            </div>
             <input type="text" id="c2-headline" placeholder="Headline…" />
-            <div class="field-label">Source URL</div>
             <input type="text" id="c2-source" placeholder="https://…" />
-            <div class="field-label">Content</div>
-            <textarea id="c2-text" class="compare-textarea" placeholder="Paste article 2 content…"></textarea>
+            <textarea
+              id="c2-text"
+              class="compare-textarea"
+              placeholder="Paste article 2 content…"
+            ></textarea>
           </div>
         </div>
 
-        <button class="btn-compare" onclick="runCompare()" aria-label="Compare articles">
-          ⚡ Compare Articles
+        <button class="btn-compare" onclick="runCompare()">
+          ⚡ Verify Articles
         </button>
 
         <div class="verdict-compare" id="compare-result" aria-live="polite">
           <div class="card-header">
-            <div class="card-header-icon" aria-hidden="true">⚖️</div>
-            <div class="card-title">Comparison Verdict</div>
+            <div class="card-header-icon">⚖️</div>
+            <div class="card-title">Verification Comparison</div>
           </div>
           <div class="compare-row">
             <div class="compare-score" id="c1-score-block">
-              <div class="cs-number" id="c1-score">—</div>
-              <div class="cs-label">Credibility Score</div>
-              <div id="c1-badge"></div>
+              <div
+                class="cs-number"
+                id="c1-score"
+                style="font-size: clamp(20px, 4vw, 28px)"
+              >
+                —
+              </div>
+              <div class="cs-label">Final Verdict</div>
             </div>
-            <div class="vs-divider" aria-hidden="true">VS</div>
+            <div class="vs-divider">VS</div>
             <div class="compare-score" id="c2-score-block">
-              <div class="cs-number" id="c2-score">—</div>
-              <div class="cs-label">Credibility Score</div>
-              <div id="c2-badge"></div>
+              <div
+                class="cs-number"
+                id="c2-score"
+                style="font-size: clamp(20px, 4vw, 28px)"
+              >
+                —
+              </div>
+              <div class="cs-label">Final Verdict</div>
             </div>
           </div>
           <div class="separator"></div>
           <div class="compare-summary" id="compare-summary"></div>
         </div>
-      </div><!-- /page-compare -->
+      </div>
 
-
-      <!-- STATS BAR / FOOTER -->
-      <footer class="stats-bar" aria-label="Model statistics">
-        <div class="stat-item">Model: <strong>TF-IDF + LogReg</strong></div>
-        <div class="stat-item">Accuracy: <strong>~96%</strong></div>
-        <div class="stat-item">Dataset: <strong>Kaggle Fake News</strong></div>
+      <footer class="stats-bar">
+        <div class="stat-item">
+          Engine: <strong>Extraction & Corroboration</strong>
+        </div>
+        <div class="stat-item">
+          Processing: <strong>Local NLP / Verification</strong>
+        </div>
         <div class="stat-item">Latency: <strong>&lt;200ms</strong></div>
       </footer>
-
     </main>
-
     <script src="script.js"></script>
   </body>
 </html>
