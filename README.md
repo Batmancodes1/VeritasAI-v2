@@ -1,182 +1,141 @@
-Here is the `README.md` rewritten to keep your exact original layout, tone, and table structures, but updated to perfectly reflect the new "Verification & Corroboration" logic (removing the 0–100 scores, prioritizing entities, and adding the new extension features).
+# VeritasAI
 
-### `README.md`
-
-````markdown
-# VeritasAI — Misinformation Analyzer
-
-> AI-powered claim verification, entity extraction, and narrative consistency analysis — in under 200ms.
+Misinformation analyzer that runs claim verification, entity extraction, and narrative consistency checks — returns a verdict in under a second.
 
 ---
 
-## What It Does
+## What it does
 
-VeritasAI has moved beyond basic word-counting and domain blacklists. It analyzes any news article across **8 parallel verification engines** and returns an absolute verdict in under a second:
+VeritasAI runs any news article through **8 parallel engines** and outputs one of three absolute verdicts: ✅ **Verified Real**, ❌ **Verified Fake**, or ⚠️ **Claim Not Established**.
 
-| Module                     | What It Evaluates                                                                   |
-| -------------------------- | ----------------------------------------------------------------------------------- |
-| **Claim Consistency (ML)** | TF-IDF + Logistic Regression trained on 44,000 articles (~99% accuracy)             |
-| **Entity Extraction**      | Identifies key subjects, organizations, and events to generate verification queries |
-| **Corroboration Engine**   | Checks if the extracted narrative structure aligns with known factual reporting     |
-| **Narrative Consistency**  | Evaluates the logical flow and timeline consistency of the text                     |
-| **Source Lookup**          | _Secondary Signal:_ Trusted vs suspicious domain database (Reuters, InfoWars, etc.) |
-| **Headline Alignment**     | Cosine similarity to ensure the headline doesn't artificially inflate body text     |
-| **Manipulation Scanner**   | _Secondary Signal:_ Detects subjective phrasing and manipulative rhetoric           |
-| **Text Highlighter**       | Marks every suspicious or manipulative word inline                                  |
-| **Comparison Mode**        | Side-by-side verification battle between two conflicting articles                   |
+| Module | What it checks |
+|---|---|
+| **Claim Consistency (ML)** | TF-IDF + Logistic Regression trained on 44,000 articles (~99% accuracy) |
+| **Entity Extraction** | Pulls out key subjects, orgs, and events to build verification queries |
+| **Corroboration Engine** | Checks if the narrative structure lines up with known factual reporting |
+| **Narrative Consistency** | Looks at logical flow and timeline consistency across the text |
+| **Source Lookup** | *Secondary signal* — trusted vs. suspicious domain database |
+| **Headline Alignment** | Cosine similarity to catch headlines that don't match the body |
+| **Manipulation Scanner** | *Secondary signal* — flags subjective phrasing and rhetorical tricks |
+| **Text Highlighter** | Marks suspicious or manipulative words inline |
+| **Comparison Mode** | Side-by-side analysis of two conflicting articles |
 
 ---
 
 ## Features
 
-- **Works offline** — full mock analysis engine runs in-browser when Flask isn't running
-- **Chrome Extension** — analyze any webpage with one click, and send data directly to the web app
-- **Demo Mode** — 3 preloaded articles (Verified Real, Verified Fake, Unestablished) for instant demos
-- **Zero dependencies** — pure HTML/CSS/JS frontend, no build step required
+- **Works offline** — a full mock engine runs in-browser if Flask isn't running
+- **Chrome Extension** — analyze any webpage with one click, send it straight to the dashboard
+- **Demo Mode** — 3 preloaded articles (real, fake, unestablished) for quick demos
+- **No build step** — pure HTML/CSS/JS frontend, open and go
 
 ---
 
-## Tech Stack
+## Tech stack
 
-| Layer     | Tech                                                       |
-| --------- | ---------------------------------------------------------- |
-| ML Model  | scikit-learn — TF-IDF + Logistic Regression                |
-| Backend   | Python + Flask + flask-cors (now serves frontend natively) |
-| Frontend  | Vanilla HTML/CSS/JS (no framework)                         |
-| Fonts     | Syne (display) · DM Sans (body) · DM Mono (mono)           |
-| Extension | Chrome Manifest V3                                         |
+| Layer | Tech |
+|---|---|
+| ML model | scikit-learn — TF-IDF + Logistic Regression |
+| Backend | Python + Flask + flask-cors |
+| Frontend | Vanilla HTML/CSS/JS |
+| Fonts | Syne · DM Sans · DM Mono |
+| Extension | Chrome Manifest V3 |
 
 ---
 
-## Getting Started
+## Getting started
 
-### Option A — Frontend only (no setup)
+**Option A — Frontend only (no setup needed)**
 
 ```bash
-# Just open in your browser — the offline mock engine handles everything
 open frontend/index.html
 ```
-````
 
-### Option B — With the real ML backend (Recommended)
+The offline mock engine handles everything automatically.
 
-**1. Install Python dependencies**
+**Option B — With the real ML backend**
 
 ```bash
 cd backend
 pip install -r requirements.txt
-
-```
-
-**2. Start the Flask server**
-
-```bash
 python app.py
-
 ```
 
-**3. Open the Dashboard**
-
-```bash
-# Open your browser to the local server
-[http://127.0.0.1:5000](http://127.0.0.1:5000)
-
-```
-
-The frontend auto-detects the backend. If Flask isn't running, it falls back to the offline mock engine seamlessly.
+Then open `http://127.0.0.1:5000`. The frontend auto-detects whether Flask is running and falls back to the mock engine if it isn't.
 
 ---
 
-## Training the ML Model (Optional)
+## Training the model (optional)
 
-The mock engine is accurate enough for demos. For the real ~99% accuracy model:
+The mock engine works fine for demos. For the full ~99% accuracy classifier:
 
-1. Download `Fake.csv` and `True.csv` from [Kaggle](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset)
-2. Place both files in `backend/`
+1. Download `Fake.csv` and `True.csv` from the [Kaggle dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset)
+2. Drop both files into `backend/`
 3. Run training:
 
 ```bash
 cd backend
 python train_model.py
-
 ```
 
-4. This saves `model.pkl` — Flask picks it up automatically on next start.
-
-Training takes ~30–60 seconds on a normal laptop.
+This generates `model.pkl` — Flask picks it up automatically on the next start. Training takes about 30–60 seconds on a normal laptop.
 
 ---
 
 ## Chrome Extension
 
-1. Open Chrome → `chrome://extensions`
+1. Go to `chrome://extensions` in Chrome
 2. Enable **Developer mode** (top-right toggle)
 3. Click **Load unpacked** → select the `chrome-extension/` folder
-4. Start the Flask backend (`python app.py`)
-5. Click the VeritasAI icon on any news article
-6. Click **Open in Dashboard** to instantly transfer the extracted article to your local web interface.
+4. Make sure the Flask backend is running (`python app.py`)
+5. Visit any news article, click the VeritasAI icon, then hit **Open in Dashboard** to transfer the article to your local web interface
 
 ---
 
-## Project Structure
+## Project structure
 
-```text
+```
 veritas-ai/
 ├── frontend/
-│   ├── index.html        UI — single-page app with Analyze + Compare tabs
-│   ├── styles.css        Design system, responsive layout, animations
-│   └── script.js         Analysis logic, mock engine, renderers
+│   ├── index.html        single-page app — Analyze + Compare tabs
+│   ├── styles.css        design system, responsive layout, animations
+│   └── script.js         analysis logic, mock engine, renderers
 │
 ├── backend/
 │   ├── app.py            Flask API with all 8 analysis modules
 │   ├── train_model.py    TF-IDF + LogReg training script
 │   └── requirements.txt  Python deps
 │
-├── chrome-extension/
-│   ├── manifest.json     Chrome Manifest V3 config
-│   ├── popup.html        Extension popup UI
-│   ├── popup.js          Extension extraction and API logic
-│   └── content.js        Page content extractor
-│
-└── README.md
-
+└── chrome-extension/
+    ├── manifest.json     Chrome Manifest V3 config
+    ├── popup.html        extension popup UI
+    ├── popup.js          extraction and API logic
+    └── content.js        page content extractor
 ```
 
 ---
 
-## How Verification Verdicts Work
+## How verdicts work
 
-Instead of exposing arbitrary probability scores, VeritasAI outputs absolute verdicts:
-
-- `✅ VERIFIED REAL`
-- `❌ VERIFIED FAKE`
-- `⚠️ CLAIM NOT ESTABLISHED`
-
-These verdicts are reached by prioritizing **Claim Consistency**, **Entity Corroboration**, and **Narrative Alignment**. The system maps the ML confidence against a strict `>= 65%` threshold. Source reputation and emotional rhetoric are heavily downgraded to act merely as _secondary supporting signals_, ensuring that highly credible sources aren't given a free pass for factual errors, and perfectly-written AI fake news is still caught by structural claim analysis.
+Raw ML probabilities aren't shown to the user. Instead, the model's confidence is mapped against a strict `>= 65%` threshold and combined with entity extraction, corroboration rules, and narrative consistency checks. Source reputation and emotional rhetoric are treated as secondary signals only — so a credible source doesn't get a free pass for factual errors, and neutral-sounding AI-generated fake news still gets caught by structural analysis.
 
 ---
 
-## Known Limitations
+## Limitations
 
-- Training data is US political news from 2016–2017 — edge cases in modern niche reporting may yield "Claim Not Established"
-- AI-generated fake news written in a neutral, academic tone will bypass the emotional scanners (which is why entity extraction and corroboration take priority)
-- Source list is static — new misinformation sites won't be flagged automatically
-- Assesses structural credibility and alignment; does not actively scrape the live internet to verify breaking events
+- Training data is US political news from 2016–2017 — niche or modern reporting may come back as "Claim Not Established"
+- AI-generated fake news written in a neutral, academic tone will slip past the emotional scanners (which is exactly why entity extraction and corroboration take priority)
+- The source list is static — newly spun-up misinformation sites won't be flagged
+- This is a structural credibility filter, not a live fact-checker — it doesn't scrape the internet to verify breaking events
 
-Best used as a **first-pass structural filter**, not a definitive arbiter of truth.
+Best used as a first-pass filter, not a definitive arbiter of truth.
 
 ---
 
 ## Dataset
 
-**Kaggle Fake and Real News Dataset** by Clément Bisaillon
+[Fake and Real News Dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset) by Clément Bisaillon
 
 - `Fake.csv` — 23,481 fake news articles
 - `True.csv` — 21,417 real Reuters articles
-- Combined: ~44,000 labeled examples
-
-Link: https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset
-
-```
-
-```
+- Combined: ~44,900 labeled examples
